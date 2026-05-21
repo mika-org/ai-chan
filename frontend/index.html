@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai-Chan (愛ちゃん) | AI Voice & AI Companion</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Puter.js: Free unlimited AI (GPT-4o) for client-side translation -->
+    <script src="https://js.puter.com/v2/"></script>
+    <!-- Client Application Logic -->
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Options -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="logo-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                <h1>Ai-Chan <span class="jp-sub">愛ちゃん</span></h1>
+            </div>
+
+            <!-- Connection Status -->
+            <div class="status-card">
+                <div class="status-header">
+                    <span class="status-title">Offline AI Connection</span>
+                    <button id="refresh-status" class="btn-icon" title="Refresh Connection">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+                <div class="status-indicator-wrapper">
+                    <span id="status-dot" class="dot offline"></span>
+                    <span id="status-text">Checking Offline LLM...</span>
+                </div>
+                <div id="status-details" class="status-details">
+                    Checking http://127.0.0.1:1234
+                </div>
+                <!-- Extra detailed info for LM Studio when connected -->
+                <div id="status-extra-info" class="status-extra-info" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                    <div class="status-info-row">
+                        <span>Endpoint:</span>
+                        <span class="info-val">127.0.0.1:1234</span>
+                    </div>
+                    <div class="status-info-row">
+                        <span>Ping Latency:</span>
+                        <span id="info-latency" class="info-val">--</span>
+                    </div>
+                    <div class="status-info-row">
+                        <span>Target Model:</span>
+                        <span id="info-target-model" class="info-val" style="color: var(--color-primary); font-weight: 600;">--</span>
+                    </div>
+                    <div class="status-info-row">
+                        <span>Active Model:</span>
+                        <span id="info-model" class="info-val-highlight">--</span>
+                    </div>
+                    <div class="status-info-row">
+                        <span>API Spec:</span>
+                        <span class="info-val">OpenAI v1</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Character Selector -->
+            <div class="section-title">Select Companion</div>
+            <div class="character-list">
+                <div class="character-option active" data-character="ai_chan">
+                    <img src="assets/ai_chan.png" alt="Ai-Chan">
+                    <div class="char-info">
+                        <span class="char-name">Ai-Chan <span class="jp-tag">元気</span></span>
+                        <span class="char-desc">Energetic, cheerful, and gaming-obsessed.</span>
+                    </div>
+                </div>
+                <div class="character-option" data-character="kaguya">
+                    <img src="assets/kaguya.png" alt="Kaguya">
+                    <div class="char-info">
+                        <span class="char-name">Kaguya <span class="jp-tag">ツンデレ</span></span>
+                        <span class="char-desc">Elegant, sharp, and secretly caring.</span>
+                    </div>
+                </div>
+                <div class="character-option" data-character="mochi">
+                    <img src="assets/mochi.png" alt="Mochi">
+                    <div class="char-info">
+                        <span class="char-name">Mochi <span class="jp-tag">ちび</span></span>
+                        <span class="char-desc">Small chibi mascot who loves sweets.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Settings -->
+            <div class="section-title">Settings</div>
+            <div class="settings-panel">
+                <!-- Voice Engine Selector -->
+                <div class="setting-item">
+                    <label>Voice Synthesis Engine</label>
+                    <div class="engine-selector">
+                        <button type="button" class="engine-tab active" data-engine="edge-tts">
+                            <i class="fa-solid fa-cloud"></i> Edge-TTS
+                        </button>
+                        <button type="button" class="engine-tab" data-engine="sbv2">
+                            <i class="fa-solid fa-microchip"></i> Local SBV2
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label for="language-select">Companion Language</label>
+                    <div class="select-wrapper">
+                        <select id="language-select">
+                            <option value="en">English (英語)</option>
+                            <option value="ja" selected>Japanese (日本語)</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Edge-TTS Configuration -->
+                <div id="edge-tts-settings" class="engine-settings-group">
+                    <div class="setting-item" style="margin-top: 4px;">
+                        <label for="voice-select">Voice Model</label>
+                        <div class="select-wrapper">
+                            <select id="voice-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Style-Bert-VITS2 Configuration -->
+                <div id="sbv2-settings" class="engine-settings-group" style="display: none;">
+                    <div class="setting-item" style="margin-top: 4px;">
+                        <label for="sbv2-model-select">Local VITS2 Model</label>
+                        <div class="select-wrapper">
+                            <select id="sbv2-model-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 10px;">
+                        <label for="sbv2-speaker-select">Speaker</label>
+                        <div class="select-wrapper">
+                            <select id="sbv2-speaker-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 10px;">
+                        <label for="sbv2-style-select">Emotion Style</label>
+                        <div class="select-wrapper">
+                            <select id="sbv2-style-select">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+
+                    <!-- Advanced parameters -->
+                    <div class="setting-item" style="margin-top: 10px;">
+                        <div class="voice-speed-wrapper">
+                            <label for="sbv2-sdp-ratio">SDP Ratio (Tone variation)</label>
+                            <span id="sbv2-sdp-val">0.2</span>
+                        </div>
+                        <input type="range" id="sbv2-sdp-ratio" min="0.0" max="1.0" step="0.05" value="0.2" class="range-slider">
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 8px;">
+                        <div class="voice-speed-wrapper">
+                            <label for="sbv2-noise">Noise (Randomness)</label>
+                            <span id="sbv2-noise-val">0.6</span>
+                        </div>
+                        <input type="range" id="sbv2-noise" min="0.1" max="1.5" step="0.05" value="0.6" class="range-slider">
+                    </div>
+
+                    <div class="setting-item" style="margin-top: 8px; margin-bottom: 6px;">
+                        <div class="voice-speed-wrapper">
+                            <label for="sbv2-noisew">Noise W (Intervals)</label>
+                            <span id="sbv2-noisew-val">0.8</span>
+                        </div>
+                        <input type="range" id="sbv2-noisew" min="0.1" max="1.5" step="0.05" value="0.8" class="range-slider">
+                    </div>
+                </div>
+
+                <!-- Offline status alert for VITS2 -->
+                <div id="sbv2-offline-banner" class="tip-box" style="display: none; border-color: rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.04); color: #ff2e73; padding: 10px; margin-top: 6px; font-size: 0.75rem;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <strong>SBV2 Server Offline!</strong> Local synthesis is unavailable. Run on port 7860.
+                </div>
+
+                <div class="setting-item" style="margin-top: 6px;">
+                    <label>Voice Playback</label>
+                    <div class="toggle-wrapper">
+                        <span class="toggle-label">Auto-play Voice</span>
+                        <label class="switch">
+                            <input type="checkbox" id="autoplay-voice" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="voice-speed-wrapper">
+                        <label for="voice-speed">Voice Speed / Rate</label>
+                        <span id="speed-val">1.0x</span>
+                    </div>
+                    <input type="range" id="voice-speed" min="0.8" max="1.3" step="0.05" value="1.0" class="range-slider">
+                </div>
+
+                <div class="setting-item">
+                    <div class="voice-speed-wrapper">
+                        <label for="max-tokens-slider">Max Response Length</label>
+                        <span id="max-tokens-val">4096 tokens</span>
+                    </div>
+                    <input type="range" id="max-tokens-slider" min="512" max="8192" step="512" value="4096" class="range-slider">
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <p>Powered by uv & FastAPI</p>
+                <p id="footer-model-info">Target Model: google/gemma-4-e4b</p>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-wrapper">
+            <!-- Header bar -->
+            <header class="chat-header">
+                <div class="current-companion-header">
+                    <img id="header-avatar" src="assets/ai_chan.png" alt="Active Companion">
+                    <div>
+                        <h2 id="header-name">Ai-Chan</h2>
+                        <p id="header-status"><span class="pulse-icon"></span>Online & Ready to Talk</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="clear-chat" class="btn btn-secondary" title="Clear Chat History">
+                        <i class="fa-solid fa-trash-can"></i> Clear Chat
+                    </button>
+                </div>
+            </header>
+
+            <!-- Messages Stream -->
+            <div class="chat-history" id="chat-history">
+                <!-- Welcome Message -->
+                <div class="message system-message">
+                    <div class="message-content">
+                        <i class="fa-solid fa-info-circle"></i> Welcome! Start chatting with your anime companion. Ensure LM Studio or Ollama is running at <strong>http://127.0.0.1:1234</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing indicator -->
+            <div class="typing-indicator-container" id="typing-indicator">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span id="typing-text">Ai-Chan is typing...</span>
+            </div>
+
+            <!-- Input Bar -->
+            <footer class="input-panel">
+                <div class="input-container">
+                    <textarea id="chat-input" placeholder="Type your message here, Senpai..." rows="1"></textarea>
+                    <div class="input-actions">
+                        <button id="voice-input-btn" class="btn-icon" title="Voice Input (Uses Web Speech API)">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        <button id="send-btn" class="btn-send">
+                            <span class="btn-text">Send</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </footer>
+        </main>
+
+        <!-- Right Visual Showcase Panel -->
+        <section class="visualizer-panel">
+            <div class="companion-display-card">
+                <div class="avatar-glow-ring" id="avatar-glow"></div>
+                <div class="avatar-wrapper">
+                    <img id="main-avatar" class="idle" src="assets/ai_chan.png" alt="Companion Visual">
+                </div>
+                
+                <div class="display-info">
+                    <h3 id="display-name">Ai-Chan <span id="display-jp" class="jp-accent">愛ちゃん</span></h3>
+                    <p id="display-tagline">"Senpai! Let's build something awesome today!"</p>
+                </div>
+
+                <!-- Speech visualizer wave -->
+                <div class="speech-wave-container" id="speech-wave">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+
+                <div class="audio-controls-card">
+                    <span class="audio-status-text" id="audio-status">Idle</span>
+                    <audio id="companion-audio" style="display: none;"></audio>
+                    <div class="audio-buttons">
+                        <button id="replay-voice" class="btn-audio" title="Replay Last Voice" disabled>
+                            <i class="fa-solid fa-volume-high"></i> Replay Voice
+                        </button>
+                        <button id="stop-voice" class="btn-audio btn-danger" title="Stop Playing" disabled>
+                            <i class="fa-solid fa-square"></i> Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Info Quick Card -->
+            <div class="model-quick-info">
+                <h4><i class="fa-solid fa-cube"></i> Local AI Setup Guideline</h4>
+                <ul>
+                    <li><strong>API Port:</strong> http://127.0.0.1:1234</li>
+                    <li><strong>Target Model:</strong> <span id="guideline-target-model" style="font-weight: 600; color: var(--color-secondary);">google/gemma-4-e4b</span></li>
+                    <li><strong>API Spec:</strong> OpenAI Chat-Completions standard</li>
+                </ul>
+                <div class="tip-box" id="guideline-tip-box">
+                    <i class="fa-solid fa-lightbulb"></i> Ensure LM Studio has the <strong>Local Server</strong> active and the model fully loaded!
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
