@@ -1,0 +1,25 @@
+{
+  "chat_history": [
+    {
+      "role": "user",
+      "content": "hi kaguya can you call me アディット先輩?",
+      "attachments": []
+    },
+    {
+      "role": "user",
+      "content": "hi kaguya can you call me アディット先輩?",
+      "attachments": []
+    },
+    {
+      "role": "user",
+      "content": "hi kaguya can you call me アディット先輩",
+      "attachments": []
+    },
+    {
+      "role": "user",
+      "content": "kaguya can you call me アディット先輩",
+      "attachments": []
+    }
+  ],
+  "summary": ""
+}

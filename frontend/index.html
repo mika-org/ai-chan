@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ai-Chan (愛ちゃん) | AI Voice & AI Companion</title>
+    <title>Ai-Chan | Advanced AI System Core</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom Style -->
@@ -16,20 +19,32 @@
     <script src="https://js.puter.com/v2/"></script>
     <!-- Client Application Logic -->
     <script src="app.js" defer></script>
+    <!-- Ai-Chan OS Features -->
+    <script src="os_features.js" defer></script>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar Options -->
         <aside class="sidebar">
             <div class="brand">
-                <span class="logo-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-                <h1>Ai-Chan <span class="jp-sub">愛ちゃん</span></h1>
+                <span class="logo-icon"><i class="fa-solid fa-microchip"></i></span>
+                <h1>AI-CHAN <span class="jp-sub">愛ちゃん</span></h1>
             </div>
+
+            
+            <!-- Navigation Menu -->
+            <nav class="main-nav" style="margin: 20px 0; display: flex; flex-direction: column; gap: 8px;">
+                <button class="nav-btn active" onclick="switchView('chat')" style="text-align: left; padding: 10px 15px; background: rgba(0,200,255,0.1); border: 1px solid var(--color-primary); color: white; cursor: pointer; border-radius: 4px;"><i class="fa-solid fa-message" style="width: 20px;"></i> Chat Core</button>
+                <button class="nav-btn" onclick="switchView('notes')" style="text-align: left; padding: 10px 15px; background: transparent; border: 1px solid transparent; color: rgba(255,255,255,0.6); cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-book" style="width: 20px;"></i> Notes & Tasks</button>
+                <button class="nav-btn" onclick="switchView('calendar')" style="text-align: left; padding: 10px 15px; background: transparent; border: 1px solid transparent; color: rgba(255,255,255,0.6); cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-calendar-days" style="width: 20px;"></i> Calendar</button>
+                <button class="nav-btn" onclick="switchView('research')" style="text-align: left; padding: 10px 15px; background: transparent; border: 1px solid transparent; color: rgba(255,255,255,0.6); cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-magnifying-glass" style="width: 20px;"></i> Deep Research</button>
+            </nav>
 
             <!-- Connection Status -->
             <div class="status-card">
                 <div class="status-header">
-                    <span class="status-title">Offline AI Connection</span>
+                    <span class="status-title">LLM Neural Link</span>
                     <button id="refresh-status" class="btn-icon" title="Refresh Connection">
                         <i class="fa-solid fa-rotate"></i>
                     </button>
@@ -42,7 +57,8 @@
                     Checking http://127.0.0.1:1234
                 </div>
                 <!-- Extra detailed info for LM Studio when connected -->
-                <div id="status-extra-info" class="status-extra-info" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <div id="status-extra-info" class="status-extra-info"
+                    style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
                     <div class="status-info-row">
                         <span>Endpoint:</span>
                         <span class="info-val">127.0.0.1:1234</span>
@@ -53,7 +69,8 @@
                     </div>
                     <div class="status-info-row">
                         <span>Target Model:</span>
-                        <span id="info-target-model" class="info-val" style="color: var(--color-primary); font-weight: 600;">--</span>
+                        <span id="info-target-model" class="info-val"
+                            style="color: var(--color-primary); font-weight: 600;">--</span>
                     </div>
                     <div class="status-info-row">
                         <span>Active Model:</span>
@@ -67,28 +84,14 @@
 
             </div>
 
-            <!-- Character Selector -->
-            <div class="section-title">Select Companion</div>
+            <!-- System Core Selector -->
+            <div class="section-title">System Core</div>
             <div class="character-list">
                 <div class="character-option active" data-character="ai_chan">
-                    <img src="assets/ai_chan.png" alt="Ai-Chan">
+                    <img src="assets/ai_chan.png" alt="Ai-Chan Core">
                     <div class="char-info">
-                        <span class="char-name">Ai-Chan <span class="jp-tag">元気</span></span>
-                        <span class="char-desc">Energetic, cheerful, and gaming-obsessed.</span>
-                    </div>
-                </div>
-                <div class="character-option" data-character="kaguya">
-                    <img src="assets/kaguya.png" alt="Kaguya">
-                    <div class="char-info">
-                        <span class="char-name">Kaguya <span class="jp-tag">ツンデレ</span></span>
-                        <span class="char-desc">Elegant, sharp, and secretly caring.</span>
-                    </div>
-                </div>
-                <div class="character-option" data-character="mochi">
-                    <img src="assets/mochi.png" alt="Mochi">
-                    <div class="char-info">
-                        <span class="char-name">Mochi <span class="jp-tag">ちび</span></span>
-                        <span class="char-desc">Small chibi mascot who loves sweets.</span>
+                        <span class="char-name">Ai-Chan <span class="jp-tag">CORE</span></span>
+                        <span class="char-desc">Advanced intelligence system. Analytical & precise.</span>
                     </div>
                 </div>
             </div>
@@ -100,10 +103,10 @@
                 <div class="setting-item">
                     <label>Voice Synthesis Engine</label>
                     <div class="engine-selector">
-                        <button type="button" class="engine-tab active" data-engine="edge-tts">
+                        <button type="button" class="engine-tab" data-engine="edge-tts">
                             <i class="fa-solid fa-cloud"></i> Edge-TTS
                         </button>
-                        <button type="button" class="engine-tab" data-engine="sbv2">
+                        <button type="button" class="engine-tab active" data-engine="sbv2">
                             <i class="fa-solid fa-microchip"></i> Local SBV2
                         </button>
                     </div>
@@ -121,7 +124,7 @@
                 </div>
 
                 <!-- Edge-TTS Configuration -->
-                <div id="edge-tts-settings" class="engine-settings-group">
+                <div id="edge-tts-settings" class="engine-settings-group" style="display: none;">
                     <div class="setting-item" style="margin-top: 4px;">
                         <label for="voice-select">Voice Model</label>
                         <div class="select-wrapper">
@@ -134,7 +137,7 @@
                 </div>
 
                 <!-- Style-Bert-VITS2 Configuration -->
-                <div id="sbv2-settings" class="engine-settings-group" style="display: none;">
+                <div id="sbv2-settings" class="engine-settings-group">
                     <div class="setting-item" style="margin-top: 4px;">
                         <label for="sbv2-model-select">Local VITS2 Model</label>
                         <div class="select-wrapper">
@@ -171,7 +174,8 @@
                             <label for="sbv2-sdp-ratio">SDP Ratio (Tone variation)</label>
                             <span id="sbv2-sdp-val">0.2</span>
                         </div>
-                        <input type="range" id="sbv2-sdp-ratio" min="0.0" max="1.0" step="0.05" value="0.2" class="range-slider">
+                        <input type="range" id="sbv2-sdp-ratio" min="0.0" max="1.0" step="0.05" value="0.2"
+                            class="range-slider">
                     </div>
 
                     <div class="setting-item" style="margin-top: 8px;">
@@ -179,7 +183,8 @@
                             <label for="sbv2-noise">Noise (Randomness)</label>
                             <span id="sbv2-noise-val">0.6</span>
                         </div>
-                        <input type="range" id="sbv2-noise" min="0.1" max="1.5" step="0.05" value="0.6" class="range-slider">
+                        <input type="range" id="sbv2-noise" min="0.1" max="1.5" step="0.05" value="0.6"
+                            class="range-slider">
                     </div>
 
                     <div class="setting-item" style="margin-top: 8px; margin-bottom: 6px;">
@@ -187,13 +192,16 @@
                             <label for="sbv2-noisew">Noise W (Intervals)</label>
                             <span id="sbv2-noisew-val">0.8</span>
                         </div>
-                        <input type="range" id="sbv2-noisew" min="0.1" max="1.5" step="0.05" value="0.8" class="range-slider">
+                        <input type="range" id="sbv2-noisew" min="0.1" max="1.5" step="0.05" value="0.8"
+                            class="range-slider">
                     </div>
                 </div>
 
                 <!-- Offline status alert for VITS2 -->
-                <div id="sbv2-offline-banner" class="tip-box" style="display: none; border-color: rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.04); color: #ff2e73; padding: 10px; margin-top: 6px; font-size: 0.75rem;">
-                    <i class="fa-solid fa-circle-exclamation"></i> <strong>SBV2 Server Offline!</strong> Local synthesis is unavailable. Run on port 7860.
+                <div id="sbv2-offline-banner" class="tip-box"
+                    style="display: none; border-color: rgba(255, 0, 85, 0.3); background: rgba(255, 0, 85, 0.04); color: #ff2e73; padding: 10px; margin-top: 6px; font-size: 0.75rem;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <strong>SBV2 Server Offline!</strong> Local synthesis
+                    is unavailable. Run on port 7860.
                 </div>
 
                 <div class="setting-item" style="margin-top: 6px;">
@@ -207,12 +215,51 @@
                     </div>
                 </div>
 
+                <div class="setting-item" style="margin-top: 6px;">
+                    <label>Translation</label>
+                    <div class="toggle-wrapper">
+                        <span class="toggle-label">Auto-translate (JP → EN)</span>
+                        <label class="switch">
+                            <input type="checkbox" id="autotranslate-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item" style="margin-top: 6px;">
+                    <label>Web Search</label>
+                    <div class="toggle-wrapper">
+                        <span class="toggle-label">Google Search Integration</span>
+                        <label class="switch">
+                            <input type="checkbox" id="websearch-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label for="target-model-select">Target Model</label>
+                    <div class="select-wrapper">
+                        <select id="target-model-select">
+                            <option value="sao10k/Fimbulvetr-11B-v2-GGUF" selected>Fimbulvetr 11B GGUF</option>
+                            <option value="google/gemma-4-e4b">Gemma 4 e4b</option>
+                            <option value="mistralai/Mistral-7B-Instruct-v0.3">Mistral 7B Instruct</option>
+                            <option value="meta-llama/Meta-Llama-3-8B-Instruct">Llama 3 8B Instruct</option>
+                            <option value="qwen/qwen3.5-35b-a3b">Qwen 3.5 35B A3B</option>
+                            <option value="Lewdiculous/L3-8B-Stheno-v3.2-GGUF">Stheno 3.2 8B</option>
+                            <option value="SanjiWatsuki/Kunoichi-DPO-v2-7B-GGUF">Kunoichi DPO 7B</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
                 <div class="setting-item">
                     <div class="voice-speed-wrapper">
                         <label for="voice-speed">Voice Speed / Rate</label>
                         <span id="speed-val">1.0x</span>
                     </div>
-                    <input type="range" id="voice-speed" min="0.8" max="1.3" step="0.05" value="1.0" class="range-slider">
+                    <input type="range" id="voice-speed" min="0.8" max="1.3" step="0.05" value="1.0"
+                        class="range-slider">
                 </div>
 
                 <div class="setting-item">
@@ -220,28 +267,41 @@
                         <label for="max-tokens-slider">Max Response Length</label>
                         <span id="max-tokens-val">4096 tokens</span>
                     </div>
-                    <input type="range" id="max-tokens-slider" min="512" max="8192" step="512" value="4096" class="range-slider">
+                    <input type="range" id="max-tokens-slider" min="50" max="4096" step="50" value="4096"
+                        class="range-slider">
                 </div>
             </div>
-            
+
             <div class="sidebar-footer">
                 <p>Powered by uv & FastAPI</p>
-                <p id="footer-model-info">Target Model: google/gemma-4-e4b</p>
+                <p id="footer-model-info">Target Model: sao10k/Fimbulvetr-11B-v2-GGUF</p>
             </div>
         </aside>
 
-        <!-- Main Chat Area -->
+        <!-- Main Chat Area (Chat View) -->
+        <div id="view-chat" class="view-panel" style="display:flex; flex-direction:row; height:100vh; overflow:hidden;">
         <main class="chat-wrapper">
             <!-- Header bar -->
             <header class="chat-header">
                 <div class="current-companion-header">
-                    <img id="header-avatar" src="assets/ai_chan.png" alt="Active Companion">
+                    <img id="header-avatar" src="assets/ai_chan.png" alt="Ai-Chan Core">
                     <div>
                         <h2 id="header-name">Ai-Chan</h2>
-                        <p id="header-status"><span class="pulse-icon"></span>Online & Ready to Talk</p>
+                        <p id="header-status">
+                            <span class="pulse-icon"></span>System Online &mdash; Intelligence Active
+                            <span id="memory-indicator" class="memory-badge"
+                                style="display: none; margin-left: 12px; font-size: 0.85em; background: rgba(255, 255, 255, 0.08); padding: 2px 8px; border-radius: 4px; align-items: center; gap: 6px; cursor: help; vertical-align: middle;">
+                                <i class="fa-solid fa-brain" style="color: var(--color-secondary);"></i> Memory: Active
+                                (<span id="memory-count">0</span>)
+                            </span>
+                        </p>
                     </div>
                 </div>
                 <div class="header-actions">
+                    <div class="language-toggle-group">
+                        <button id="lang-btn-ja" class="btn-lang active" title="Switch to Japanese">JP</button>
+                        <button id="lang-btn-en" class="btn-lang" title="Switch to English">EN</button>
+                    </div>
                     <button id="clear-chat" class="btn btn-secondary" title="Clear Chat History">
                         <i class="fa-solid fa-trash-can"></i> Clear Chat
                     </button>
@@ -250,10 +310,11 @@
 
             <!-- Messages Stream -->
             <div class="chat-history" id="chat-history">
-                <!-- Welcome Message -->
+                <!-- Boot Message -->
                 <div class="message system-message">
                     <div class="message-content">
-                        <i class="fa-solid fa-info-circle"></i> Welcome! Start chatting with your anime companion. Ensure LM Studio or Ollama is running at <strong>http://127.0.0.1:1234</strong>.
+                        <i class="fa-solid fa-microchip"></i> <strong>SYSTEM CORE INITIALIZING...</strong>
+                        ESTABLISH NEURAL LINK AT <strong>http://127.0.0.1:1234</strong> to activate full intelligence protocols.
                     </div>
                 </div>
             </div>
@@ -263,14 +324,26 @@
                 <span class="typing-dot"></span>
                 <span class="typing-dot"></span>
                 <span class="typing-dot"></span>
-                <span id="typing-text">Ai-Chan is typing...</span>
+                <span id="typing-text">Ai-Chan is processing...</span>
             </div>
+
+            <!-- Attachment Previews -->
+            <div id="attachment-preview-container" class="attachment-preview-container" style="display: none;"></div>
 
             <!-- Input Bar -->
             <footer class="input-panel">
                 <div class="input-container">
-                    <textarea id="chat-input" placeholder="Type your message here, Senpai..." rows="1"></textarea>
+                    <textarea id="chat-input" placeholder="Enter query, Sir..." rows="1"></textarea>
                     <div class="input-actions">
+                        <button id="location-btn" class="btn-icon" title="Share My Location">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </button>
+                        <button id="attach-file-btn" class="btn-icon" title="Attach file (Images, PDF, TXT)">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        <input type="file" id="file-upload" multiple
+                            accept="image/*,.pdf,.txt,.md,.json,.csv,.js,.py,.html,.css,.xlsx,.docx"
+                            style="display: none;">
                         <button id="voice-input-btn" class="btn-icon" title="Voice Input (Uses Web Speech API)">
                             <i class="fa-solid fa-microphone"></i>
                         </button>
@@ -286,14 +359,15 @@
         <!-- Right Visual Showcase Panel -->
         <section class="visualizer-panel">
             <div class="companion-display-card">
+                <canvas id="neural-canvas"></canvas>
                 <div class="avatar-glow-ring" id="avatar-glow"></div>
                 <div class="avatar-wrapper">
-                    <img id="main-avatar" class="idle" src="assets/ai_chan.png" alt="Companion Visual">
+                    <img id="main-avatar" class="idle" src="assets/ai_chan.png" alt="Ai-Chan Core">
                 </div>
-                
+
                 <div class="display-info">
                     <h3 id="display-name">Ai-Chan <span id="display-jp" class="jp-accent">愛ちゃん</span></h3>
-                    <p id="display-tagline">"Senpai! Let's build something awesome today!"</p>
+                    <p id="display-tagline">"All systems nominal. Ready for your query, Sir."</p>
                 </div>
 
                 <!-- Speech visualizer wave -->
@@ -326,17 +400,140 @@
 
             <!-- Model Info Quick Card -->
             <div class="model-quick-info">
-                <h4><i class="fa-solid fa-cube"></i> Local AI Setup Guideline</h4>
+                <h4><i class="fa-solid fa-satellite-dish"></i> Neural Link Configuration</h4>
                 <ul>
-                    <li><strong>API Port:</strong> http://127.0.0.1:1234</li>
-                    <li><strong>Target Model:</strong> <span id="guideline-target-model" style="font-weight: 600; color: var(--color-secondary);">google/gemma-4-e4b</span></li>
-                    <li><strong>API Spec:</strong> OpenAI Chat-Completions standard</li>
+                    <li><strong>API Endpoint:</strong> http://127.0.0.1:1234</li>
+                    <li><strong>Target Model:</strong> <span id="guideline-target-model"
+                            style="font-weight: 600; color: var(--color-primary);">sao10k/Fimbulvetr-11B-v2-GGUF</span>
+                    </li>
+                    <li><strong>Protocol:</strong> OpenAI Chat-Completions (v1)</li>
                 </ul>
                 <div class="tip-box" id="guideline-tip-box">
-                    <i class="fa-solid fa-lightbulb"></i> Ensure LM Studio has the <strong>Local Server</strong> active and the model fully loaded!
+                    <i class="fa-solid fa-triangle-exclamation"></i> Ensure LM Studio <strong>Local Server</strong> is active and the model is fully loaded.
                 </div>
             </div>
         </section>
+        </div><!-- end view-chat -->
+
+        <!-- =========================================================== -->
+        <!-- NOTES & TASKS PANEL -->
+        <!-- =========================================================== -->
+        <div id="view-notes" class="view-panel os-panel" style="display: none;">
+            <div class="os-panel-header">
+                <h2><i class="fa-solid fa-book"></i> Notes &amp; Tasks</h2>
+                <p>Your personal knowledge base and task queue.</p>
+            </div>
+            <div class="os-panel-body">
+                <!-- Notes Column -->
+                <div class="os-col">
+                    <div class="os-col-header">
+                        <h3><i class="fa-solid fa-note-sticky"></i> Notes</h3>
+                        <button class="os-btn-primary" onclick="openNoteModal()">
+                            <i class="fa-solid fa-plus"></i> New Note
+                        </button>
+                    </div>
+                    <div id="notes-list" class="os-list"></div>
+                </div>
+                <!-- Tasks Column -->
+                <div class="os-col">
+                    <div class="os-col-header">
+                        <h3><i class="fa-solid fa-list-check"></i> Tasks</h3>
+                        <button class="os-btn-primary" onclick="openTaskModal()">
+                            <i class="fa-solid fa-plus"></i> Add Task
+                        </button>
+                    </div>
+                    <div id="tasks-list" class="os-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- CALENDAR PANEL -->
+        <!-- =========================================================== -->
+        <div id="view-calendar" class="view-panel os-panel" style="display: none;">
+            <div class="os-panel-header">
+                <h2><i class="fa-solid fa-calendar-days"></i> Calendar</h2>
+                <p>Temporal event tracking and scheduling matrix.</p>
+            </div>
+            <div class="os-panel-body" style="flex-direction: column;">
+                <div class="os-col-header" style="margin-bottom: 20px;">
+                    <div style="display:flex; gap: 12px; align-items: center;">
+                        <button class="os-btn-icon" id="cal-prev" onclick="calNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                        <h3 id="cal-month-label" style="min-width:180px; text-align:center;"></h3>
+                        <button class="os-btn-icon" id="cal-next" onclick="calNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                    <button class="os-btn-primary" onclick="openEventModal()">
+                        <i class="fa-solid fa-plus"></i> Add Event
+                    </button>
+                </div>
+                <div id="calendar-grid" class="calendar-grid"></div>
+                <div class="os-col" style="margin-top:24px;">
+                    <h3 style="margin-bottom:12px;"><i class="fa-solid fa-clock"></i> Upcoming Events</h3>
+                    <div id="events-list" class="os-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- DEEP RESEARCH PANEL -->
+        <!-- =========================================================== -->
+        <div id="view-research" class="view-panel os-panel" style="display: none;">
+            <div class="os-panel-header">
+                <h2><i class="fa-solid fa-magnifying-glass-chart"></i> Deep Research Engine</h2>
+                <p>Autonomous multi-source web synthesis and long-form intelligence reporting.</p>
+            </div>
+            <div class="os-panel-body" style="flex-direction: column; gap: 20px;">
+                <div class="research-input-box">
+                    <textarea id="research-query" placeholder="Enter your research query, Sir... (e.g. 'Latest advances in quantum computing 2025')" rows="3"></textarea>
+                    <button class="os-btn-primary" id="research-run-btn" onclick="runDeepResearch()">
+                        <i class="fa-solid fa-rocket"></i> Launch Research
+                    </button>
+                </div>
+                <div id="research-progress" style="display:none;" class="research-progress-box"></div>
+                <div id="research-report" style="display:none;" class="research-report-box"></div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- MODALS -->
+        <!-- =========================================================== -->
+        <div id="modal-overlay" class="modal-overlay" onclick="closeModal()" style="display:none;"></div>
+        <!-- Note Modal -->
+        <div id="modal-note" class="os-modal" style="display:none;">
+            <div class="os-modal-header"><h3><i class="fa-solid fa-note-sticky"></i> <span id="note-modal-title">New Note</span></h3><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <input id="note-title-input" class="os-input" placeholder="Note title..." type="text">
+            <textarea id="note-content-input" class="os-textarea" placeholder="Write your note here..."></textarea>
+            <div class="os-modal-footer">
+                <button class="os-btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="os-btn-primary" onclick="saveNote()"><i class="fa-solid fa-floppy-disk"></i> Save Note</button>
+            </div>
+        </div>
+        <!-- Task Modal -->
+        <div id="modal-task" class="os-modal" style="display:none;">
+            <div class="os-modal-header"><h3><i class="fa-solid fa-list-check"></i> New Task</h3><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <input id="task-content-input" class="os-input" placeholder="Task description..." type="text">
+            <input id="task-due-input" class="os-input" type="datetime-local" style="margin-top:10px;">
+            <div class="os-modal-footer">
+                <button class="os-btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="os-btn-primary" onclick="saveTask()"><i class="fa-solid fa-floppy-disk"></i> Add Task</button>
+            </div>
+        </div>
+        <!-- Event Modal -->
+        <div id="modal-event" class="os-modal" style="display:none;">
+            <div class="os-modal-header"><h3><i class="fa-solid fa-calendar-plus"></i> New Event</h3><button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <input id="event-title-input" class="os-input" placeholder="Event title..." type="text">
+            <textarea id="event-desc-input" class="os-textarea" placeholder="Description..." rows="2" style="height:70px;"></textarea>
+            <div style="display:flex;gap:12px;margin-top:10px;">
+                <div style="flex:1;"><label style="font-size:0.75rem;opacity:0.6;display:block;margin-bottom:4px;">Start</label><input id="event-start-input" class="os-input" type="datetime-local"></div>
+                <div style="flex:1;"><label style="font-size:0.75rem;opacity:0.6;display:block;margin-bottom:4px;">End</label><input id="event-end-input" class="os-input" type="datetime-local"></div>
+            </div>
+            <div class="os-modal-footer">
+                <button class="os-btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="os-btn-primary" onclick="saveEvent()"><i class="fa-solid fa-floppy-disk"></i> Save Event</button>
+            </div>
+        </div>
+
     </div>
 </body>
+
 </html>
